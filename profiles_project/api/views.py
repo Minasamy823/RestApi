@@ -5,8 +5,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from . import models
-from . import ermissions
+from . import Permissions1
 from rest_framework.authentication import TokenAuthentication
+from rest_framework import filters
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.authtoken.views import ObtainAuthToken
 
 
 
@@ -99,6 +102,7 @@ class Helloviewset(viewsets.ViewSet):
         return Response ({'http_method': "PUT"})
 
 
+
     def partial_update (self, request, pk=None):
         """UPDATE ANY OBJECT PARTIALLY"""
         return Response({'http_method':"PATCH"})
@@ -114,4 +118,15 @@ class userprofileViewset(viewsets.ModelViewSet):
      serializer_class = serializers.userprofileserializer
      queryset = models.UserProfile.objects.all()
      authentication_classes = (TokenAuthentication,)
-     permission_classes = (permissions.UpdateownProfile,)
+     permission_classes = (Permissions1.UpdateownProfile,)
+     filter_backends = (filters.SearchFilter,)
+     """Its for adding filters like by name and so on"""
+     search_fields =('name', 'email')
+     """here we defined exactly what fileds the user can search by and use in the filters search"""
+
+class Loginviewset (viewsets.ViewSet):
+    """checks email and pass and return the response"""
+    serializer_class = AuthTokenSerializer
+    def create (self, request):
+        """use the obtainauthtoken apiview to validate and create a token """
+        return ObtainAuthToken().post(request)

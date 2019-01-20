@@ -6,7 +6,7 @@ from django.urls import path, include
 router = DefaultRouter()
 router.register('hello-viewset', views.Helloviewset, base_name='hello-viewset')
 router.register('profile', views.userprofileViewset)
-
+router.register('login', views.Loginviewset, base_name='login')
 urlpatterns = [
     url(r'^api/', views.HelloApiView.as_view()),
     url(r'', include(router.urls))
