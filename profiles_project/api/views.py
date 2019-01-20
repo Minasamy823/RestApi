@@ -5,6 +5,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from . import models
+from . import ermissions
+from rest_framework.authentication import TokenAuthentication
+
+
+
 
 class HelloApiView(APIView):
     """test the API view """
@@ -104,6 +109,9 @@ class Helloviewset(viewsets.ViewSet):
 
 
 class userprofileViewset(viewsets.ModelViewSet):
+
      """handles creating, creating and updating the profiles"""
      serializer_class = serializers.userprofileserializer
      queryset = models.UserProfile.objects.all()
+     authentication_classes = (TokenAuthentication,)
+     permission_classes = (permissions.UpdateownProfile,)
