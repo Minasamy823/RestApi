@@ -10,7 +10,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework import filters
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
-
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 
 
 
@@ -130,3 +131,21 @@ class Loginviewset (viewsets.ViewSet):
     def create (self, request):
         """use the obtainauthtoken apiview to validate and create a token """
         return ObtainAuthToken().post(request)
+
+
+class profilefeedbackviewset(viewsets.ModelViewSet):
+    """handles, creating, reading, updating the status"""
+
+    authentication_classes = (TokenAuthentication,)
+    queryset = models.profilefeedback.objects.all()
+    serializer_class = serializers.profilefeedbackserializers
+    permission_classes = (Permissions1.postownstatus, IsAuthenticated)
+
+    def perform_create (self, serializer):
+        """this is for handling when the user writes the status just in his profile not in any others profiles"""
+        """so we will inherite from the models this class 'user_profile' from the class of feedback in the modls just to keep the foriegn key
+         and to be sure that the user is making a status in his own account and we will add to that in the permissions file"""
+
+        serializer.save(user_profile=self.request.user)
+
+

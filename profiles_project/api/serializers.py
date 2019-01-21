@@ -20,7 +20,7 @@ class userprofileserializer (serializers.ModelSerializer):
     """ITS FOR OUR PROFILE OBJECTS"""
 
     class Meta:
-        """meta class tells rest framework what classes do we need to take from the models"""
+        """meta class tells rest framework what classes do we need to take from the models to appear for the user in the screen """
         model = models.UserProfile
         fields = ('id', 'name', 'password', 'email')
         extra_kwargs = {'password': {'write_only': True}}
@@ -36,3 +36,12 @@ class userprofileserializer (serializers.ModelSerializer):
         user.save()
 
         return user
+
+class profilefeedbackserializers(serializers.ModelSerializer):
+    """this serializers is for the model of the feedback we have created and it is responsibile for appering the fields er have
+    created in the database , so for evey model we create in the database we need a serializer for it to appear in the iterface of the user"""
+    class Meta:
+
+           model = models.profilefeedback
+           fields = ('id', 'user_profile', 'status_text', 'created_on')
+           extra_kwargs = {'user_profile' : {'read_only' : True}}

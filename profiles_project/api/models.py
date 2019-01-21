@@ -73,3 +73,19 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         """Django uses this when it needs to convert the object to text."""
 
         return self.email
+
+
+
+class profilefeedback (models.Model):
+    """creating a table in the database where we can store the status of every profile user"""
+
+    user_profile = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+    """this one to link every status with its profile and delete the status in case the user deleted his profile account"""
+    status_text = models.CharField(max_length=255)
+    """this is the status that we are gonna return from this class"""
+    created_on = models.DateTimeField(auto_now_add=True)
+    """this one to put a time for the status as the time when it is gonna be added"""
+
+    def __str__(self):
+        """this for returning the model as a string"""
+        return self.status_text
